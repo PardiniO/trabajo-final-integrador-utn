@@ -26,4 +26,8 @@ async function login(req, res) {
     res.json({ token });
 }
 
-module.exports = { registrar, login };
+function perfil(req, res) {
+    res.json({ id: req.usuario.id, rol: req.usuario.rol });
+}
+
+module.exports = { registrar, login, perfil };
