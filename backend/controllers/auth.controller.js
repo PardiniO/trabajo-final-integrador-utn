@@ -8,4 +8,15 @@ async function registrar(req, res) {
     res.status(201).json({ id: usuario.id, nombre: usuario.nombre, email: usuario.email });
 }
 
-module.exports = { registrar };
+async function login(req, res) {
+    const { email, password } = req.body;
+    const usuario = await Usuario.findOne({ where: { email }});
+    if (!usuario) return res.status(401).json({ error: 'Credenciales inválidas' });
+
+    const coincide = await bcrypt.compare(password, usuario.password);
+    if (!coincide) return res.status(401).json({ error: 'Credenciales inválidas' });
+
+    res.status(200).json({ mensaje: 'Login correcto' });
+}
+
+module.exports = { registrar, login };
