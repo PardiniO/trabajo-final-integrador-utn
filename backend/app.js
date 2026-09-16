@@ -2,8 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const sequelize = require('./config/db');
 require('./models/Usuario');
+const authRoutes = require('./routes/auth.routes');
 
 const app = express();
+app.use(express.json());
+
+app.use('/api/auth', authRoutes);
 
 sequelize.authenticate()
     .then(() => sequelize.sync())
