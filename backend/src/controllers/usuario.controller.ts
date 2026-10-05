@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { UsuarioModel, type UsuarioInput } from "../models/usuario.model";
 
+const bcrypt = require("bcrypt");
+
 type IdParams = { id: string };
 
 function parseId(value: string) {
@@ -12,9 +14,7 @@ function isUsuarioInput(body: any): body is UsuarioInput {
     return (
         typeof body?.nombre === 'string' && body.nombre.trim() !== '' &&
         typeof body?.email === 'string' && body.email.trim() !== '' &&
-        typeof body?.password === 'string' && body.password.trim() !== '' &&
-        typeof body?.fecha_registro === 'string' && body.fecha_registro.trim() !== '' &&
-        typeof body?.ultimo_acceso === 'string' && body.ultimo_acceso.trim() !== ''
+        typeof body?.password === 'string' && body.password.trim() !== ''
     );
 }
 
@@ -39,7 +39,10 @@ export const create = async (req: Request, res: Response) => {
         });
         return;
     }
-    const nuevo = await UsuarioModel.create(req.body);
+    const nuevo = await UsuarioModel.create({
+        ...req.body,
+        password: await bcrypt.hash(req.body.password, 10),
+    });
     res.status(201).json(nuevo);
 };
 
@@ -50,10 +53,13 @@ export const update = async (req: Request<IdParams>, res: Response) => {
         res.status(400).json({ error: 'Datos inválidos' }); return;
     }
 
-    const ok = await UsuarioModel.update(id, req.body);
+    const ok = await UsuarioModel.update(id, {
+        ...req.body,
+        password: await bcrypt.hash(req.body.password, 10),
+    });
     if (!ok) { res.status(404).json({ error: 'Usuario no encontrado' }); return; }
 
-    res.json({ id, ...req.body });
+    res.json({ id, nombre: req.body.nombre, email: req.body.email });
 };
 
 export const remove = async (req: Request<IdParams>, res: Response) => {

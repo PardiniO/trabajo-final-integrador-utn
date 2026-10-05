@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS carpeta (
     nombre VARCHAR(255) NOT NULL,
     fecha_creacion  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_carpeta_biblioteca
-        FOREIGN KEY (id_biblioteca) REFERENCES biblioteca
+        FOREIGN KEY (id_biblioteca) REFERENCES biblioteca(id)
         ON DELETE CASCADE
 );
 
