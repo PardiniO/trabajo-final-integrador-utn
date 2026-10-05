@@ -35,11 +35,11 @@ CREATE TABLE IF NOT EXISTS archivo (
     id_carpeta INT NOT NULL,
     nombre VARCHAR(255) NOT NULL,
     tipo_archivo VARCHAR(10) NOT NULL CHECK (tipo_archivo = 'pdf'),
-    tamano BIGINT NOT NULL CHECK (tamano > 0),
+    size BIGINT NOT NULL CHECK (size > 0),
     cantidad_paginas INT NOT NULL CHECK (cantidad_paginas > 0),
     ruta_archivo VARCHAR(255) NOT NULL UNIQUE,
     portada VARCHAR(255) NULL,
-    fecha_incorporacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_agregado DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_archivo_usuario
         FOREIGN KEY (id_usuario) REFERENCES usuario(id)
         ON DELETE CASCADE,

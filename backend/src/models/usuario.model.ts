@@ -5,8 +5,8 @@ export interface Usuario {
     id: number;
     nombre: string;
     email: string;
-    fecha_registro: string | Date;
-    ultimo_acceso: string | Date | null;
+    fecha_registro?: string | Date;
+    ultimo_acceso?: string | Date | null;
 }
 
 export type UsuarioInput = Pick<Usuario, 'nombre' | 'email'> & { password: string };
